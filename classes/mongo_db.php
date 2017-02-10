@@ -4,7 +4,6 @@
 			$this->connection = $this->connection();
 			$this->db = $this->addDB();
 			$this->collection = $this->addCollection();
-			$this->document = $this->addDocument();
 			$this->find = $this->findDocs();
 			$this->display = $this->displayDoc();
 		}
@@ -25,8 +24,8 @@
 			return $hotels;
 		}
 
-		public function addDocument() {
-			$document = array('name' => 'Holiday Inn Orlando', 'location' => 'Orlando', 'Price' => '$128');
+		public function addDocument($name, $location, $price) {
+			$document = array('name' => $name, 'location' => $location, 'price' => $price);
 			$this->collection->insert($document);
 			return $document;
 		}

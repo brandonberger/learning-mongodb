@@ -1,53 +1,48 @@
 <?php
-	class CreateDatabase {
+	class MongoDB_Main {
+
+		protected static $connection;
+		protected static $db;
+		protected static $collection;
+		protected static $find;
+		protected static $display;
+
 		public function __construct() {
-			$this->connection = $this->connection();
-			$this->db = $this->addDB();
-			$this->collection = $this->addCollection();
-			$this->find = $this->findDocs();
-			$this->display = $this->displayDoc();
+			self::$connection = $this->connection();
+			self::$db = $this->addDB();
+			self::$collection = $this->addCollection();
+			self::$find = $this->findDocs();
+			self::$display = $this->displayDoc();
 		}
 
-		protected function connection() {
+		public function connection() {
 			$con = new MongoClient();
 			return $con;
 		}
 
 		public function addDB() {
-			$db = $this->connection->GPC;
+			$db = self::$connection->GPC;
 			return $db;
 		}
 
-		public function addCollection() {
-			$this->db->createCollection("hotels");
-			$hotels = $this->db->hotels;
+		public static function addCollection() {
+			self::$db->createCollection("hotels");
+			$hotels = self::$db->hotels;
 			return $hotels;
 		}
 
-		public function addDocument($name, $location, $price) {
-			$document = array('name' => $name, 'location' => $location, 'price' => $price);
-			$this->collection->insert($document);
-			return $document;
-		}
-
 		public function findDocs() {
-			$find = $this->collection->find();
+			$find = self::$collection->find();
 			return $find;
 		}
 
 		public function displayDoc() {
-			foreach ($this->find as $row) {
+			foreach (self::$find as $row) {
 				$display[] = $row;
 			}
 
 			return $display;
 		}
-	}
-
-	$obj = new CreateDatabase;
-	foreach ($obj->display as $data) {
-		echo $data['name'] . ' ' . $data['location'] . ' ' . $data['price'];
-		echo '<br><br>';
 	}
 
 

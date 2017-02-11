@@ -1,19 +1,21 @@
 <?php 
 	require 'classes/mongo_db.php';
+	require 'classes/DATA_ENTRY/add_hotel.php';
 	require 'classes/routes.php';
-	$mongo = new CreateDatabase;
+	$mongo = new MongoDB_Main;
 	$route = new Route;
 
 	if (isset($_POST['submit'])) {
 		$data = $_POST;
 		if (!empty($data['name']) && !empty($data['location']) && !empty($data['price'])) {
-			$mongo->addDocument($data['name'], $data['location'], $data['price']);
+			new Add_Hotel($data);
 			header('Location: main.php'.$route->handleSubmit($_POST));
 		}
 	}
 
 	if (!empty($_GET)) {
 		echo '<b>Doc Added</b><br>';
+		$data = $_GET;
 		echo 'Hotel: ' . $data['name'] . '<br>' . 'Location: ' . $data['location'] . '<br>' . 'Price: ' . $data['price'];
 	}
 ?>

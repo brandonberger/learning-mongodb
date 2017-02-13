@@ -10,9 +10,9 @@
 		public function __construct() {
 			self::$connection = $this->connection();
 			self::$db = $this->addDB();
-			self::$collection = $this->addCollection();
-			self::$find = $this->findDocs();
-			self::$display = $this->displayDoc();
+			//self::$collection = $this->addCollection();
+			//self::$find = $this->findDocs();
+			//self::$display = $this->displayDoc();
 		}
 
 		public function connection() {
@@ -25,22 +25,22 @@
 			return $db;
 		}
 
-		public static function addCollection() {
-			self::$db->createCollection("hotels");
-			$hotels = self::$db->hotels;
-			return $hotels;
+		public static function addCollection($name) {
+			self::$db->createCollection($name);
+			$collection = self::$db->{$name};
+			return $collection;
 		}
 
-		public function findDocs() {
-			$find = self::$collection->find();
+		public function findDocs($collection, $query = false) {
+			print_r((object)json_encode($query));
+			($query) ? $find = $collection->find(json_encode($query)) : $find = $collection->find();
 			return $find;
 		}
 
-		public function displayDoc() {
-			foreach (self::$find as $row) {
+		public function displayDoc($find) {
+			foreach ($find as $row) {
 				$display[] = $row;
 			}
-
 			return $display;
 		}
 	}

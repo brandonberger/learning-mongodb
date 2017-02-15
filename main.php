@@ -28,7 +28,7 @@
 				$orderDoc = $mongo->findDocs($orderDoc, array('_id'=>$value));
 				$orderDoc = $mongo->displayDoc($orderDoc);
 				foreach ($orderDoc as $order_doc) {
-					
+
 				}
  				continue;
 			}

@@ -10,8 +10,6 @@
 
 	if (isset($_POST['submit']) || isset($_POST['show'])) {
 		$data = $_POST;
-		unset($_POST['submit']);
-		unset($_POST['show']);
 		if (!empty($data['name']) && !empty($data['location']) && !empty($data['price'])) {
 			new Add_Hotel($data);
 			header('Location: main.php'.$route->handleSubmit($_POST));

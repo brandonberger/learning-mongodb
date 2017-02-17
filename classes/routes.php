@@ -6,7 +6,7 @@
 				$keys[] = $key;
 			}
 			for ($i = 0; $i < count($data); $i++) {
-				if ($keys[$i] == 'submit') continue;
+				if ($keys[$i] == 'submit' || $keys[$i] == 'show') continue;
 				if (is_array($data[$keys[$i]])) {
 					$x = 0;
 					foreach ($data[$keys[$i]] as $embeded) {

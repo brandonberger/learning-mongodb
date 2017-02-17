@@ -50,8 +50,7 @@
 		}
 
 		public function findDocs($collection, $query = false) {
-			//print_r((object)json_encode($query));
-			($query) ? $find = $collection->find(json_encode($query)) : $find = $collection->find();
+			($query) ? $find = $collection->find($query) : $find = $collection->find();
 			return $find;
 		}
 

@@ -25,14 +25,22 @@
 		foreach ($data as $key => $value) {
 			if ($key == 'order_id') {
 				$orderDoc = $mongo->addCollection('orders');
-				$orderDoc = $mongo->findDocs($orderDoc, array('_id'=>$value));
+				//'ObjectId(58a3a91056acfdff8cbe792c)'
+				$orderDoc = $mongo->findDocs($orderDoc, array('_id' => new MongoId($value)));
 				$orderDoc = $mongo->displayDoc($orderDoc);
 				foreach ($orderDoc as $order_doc) {
-
+					echo $order_doc['first_name'] . ' ' . $order_doc['last_name'];
+					echo '<br>';
+					$x = 0;
+					if ($order_doc['leg_1'] || $order_doc['leg_2']) {
+						echo 'Pickup: '.$order_doc['leg_1']['pickup'];
+						echo 'Dropoff: '.$order_doc['leg_1']['dropoff'];
+						$x++;
+					}	
 				}
  				continue;
 			}
-			echo $key .': '. $value.'<br>';
+			echo '<br>'.$key .': '. $value.'<br>';
 		}
 		echo '<br>';
 	}

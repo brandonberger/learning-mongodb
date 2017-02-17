@@ -35,11 +35,12 @@
 					$legs = 0;
 					foreach ($order_doc as $key => $value) {
 						if (substr($key, 0, strpos($key, '_')) == 'leg') {
-							if ($legs == 0) {
+
+							if ($legs == 0)
 								echo '<b><h3>Transportation:</h3></b>';
-							} else {
+							else
 								echo $break;
-							}
+
 							$legs++;
 							$leg_block  = '<b>'.ucfirst(str_replace('_', ' ', $key)).'</b>';
 							$leg_block .= $break.'Pickup #' .$legs.': '.$order_doc[$key]['pickup'];
@@ -89,7 +90,7 @@
 	$orders = $mongo->findDocs($orders);
 	$orders = $mongo->displayDoc($orders);
 	foreach ($orders as $order) {
-		(isset($order_dropdown)) ? $order_dropdown .= '<option value="'.$order['_id'].'">'.$order['_id'].'</option>' : $order_dropdown = '<option value="'.$order['_id'].'">'.$order['_id'].'</option>';
+		(isset($order_dropdown)) ? $order_dropdown .= '<option value="'.$order['_id'].'">'.$order['first_name'].' '.$order['last_name'].'</option>' : $order_dropdown = '<option value="'.$order['_id'].'">'.$order['first_name'].' '.$order['last_name'].'</option>';
 	}
 
 ?>

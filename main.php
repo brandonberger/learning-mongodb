@@ -5,9 +5,13 @@
 	require 'classes/routes.php';
 	$mongo = new MongoDB_Main;
 	$route = new Route;
+	$break = '<br>';
+	$break_2 = '<br><br>';
 
 	if (isset($_POST['submit']) || isset($_POST['show'])) {
 		$data = $_POST;
+		unset($_POST['submit']);
+		unset($_POST['show']);
 		if (!empty($data['name']) && !empty($data['location']) && !empty($data['price'])) {
 			new Add_Hotel($data);
 			header('Location: main.php'.$route->handleSubmit($_POST));
@@ -20,23 +24,52 @@
 	}
 
 	if (!empty($_GET)) {
-		echo '<b>Doc Added</b><br>';
+		echo '<b><h2>RESULT:</h2></b><hr>';
 		$data = $_GET;
 		foreach ($data as $key => $value) {
 			if ($key == 'order_id') {
 				$orderDoc = $mongo->addCollection('orders');
-				//'ObjectId(58a3a91056acfdff8cbe792c)'
 				$orderDoc = $mongo->findDocs($orderDoc, array('_id' => new MongoId($value)));
 				$orderDoc = $mongo->displayDoc($orderDoc);
 				foreach ($orderDoc as $order_doc) {
-					echo $order_doc['first_name'] . ' ' . $order_doc['last_name'];
-					echo '<br>';
-					$x = 0;
-					if ($order_doc['leg_1'] || $order_doc['leg_2']) {
-						echo 'Pickup: '.$order_doc['leg_1']['pickup'];
-						echo 'Dropoff: '.$order_doc['leg_1']['dropoff'];
-						$x++;
-					}	
+					$legs = 0;
+					foreach ($order_doc as $key => $value) {
+						if (substr($key, 0, strpos($key, '_')) == 'leg') {
+							if ($legs == 0) {
+								echo '<b><h3>Transportation:</h3></b>';
+							} else {
+								echo $break;
+							}
+							$legs++;
+							$leg_block  = '<b>'.ucfirst(str_replace('_', ' ', $key)).'</b>';
+							$leg_block .= $break.'Pickup #' .$legs.': '.$order_doc[$key]['pickup'];
+							$leg_block .= $break.'Dropoff #'.$legs.': '.$order_doc[$key]['dropoff'];
+							$leg_block .= $break;
+							echo $leg_block;
+						} else {
+							if ($key == 'hotel') {
+								$hotelDoc = $mongo->addCollection('hotels');
+								$hotelDoc = $mongo->findDocs($hotelDoc, array('_id' => new MongoId($value)));
+								$hotelDoc = $mongo->displayDoc($hotelDoc);
+								foreach ($hotelDoc as $hotel_doc) {
+									foreach ($hotel_doc as $hotel_key => $hotel_property) {
+										if ($hotel_key == '_id') {
+											echo '<b><h3>'.ucfirst($key).':</h3></b>';
+											continue;
+										}
+										echo ucfirst(str_replace('_', ' ', $hotel_key)).': '. ucfirst($hotel_property).$break;
+									}
+								}
+								continue;
+							}
+
+							if ($key == '_id') {
+								echo '<b><h3>Customer:</h3></b>';
+								continue;
+							}
+							echo ucfirst(str_replace('_', ' ', $key)).': '. ucfirst($value).$break;
+						}
+					}
 				}
  				continue;
 			}

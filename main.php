@@ -77,11 +77,20 @@
 		echo '<br>';
 	}
 
-	$hotels = $mongo->addCollection('hotels');
-	$hotels = $mongo->findDocs($hotels);
-	$hotels = $mongo->displayDoc($hotels);
+	$hotels     = $mongo->addCollection('hotels');
+	$collection = $hotels->getName();
+	$hotels     = $mongo->findDocs($hotels);
+	$hotels     = $mongo->displayDoc($hotels);
+
+	// Using DBRefs
+	// Get hotel by DBRef
+	// > var order = db.orders.findOne({'first_name':'Brandon'})
+	// > var dbRef = order.hotel
+	// > db[dbRef.$ref].findOne({'_id':ObjectId(dbRef.$id)})
+
 	foreach ($hotels as $hotel) {
-		(isset($hotel_dropdown)) ? $hotel_dropdown .= '<option value="'.$hotel['_id'].'">'.$hotel['name'].'</option>' : $hotel_dropdown = '<option value="'.$hotel['_id'].'">'.$hotel['name'].'</option>';
+		$id = $hotel['_id'];
+		(isset($hotel_dropdown)) ? $hotel_dropdown .= '<option value="'.$id.'">'.$hotel['name'].'</option>' : $hotel_dropdown = '<option value="'.$id.'">'.$hotel['name'].'</option>';
 	}
 
 	$orders = $mongo->addCollection('orders');
@@ -109,7 +118,10 @@
 		<legend>Add Order Document</legend>
 		<input type="text" name="first_name" placeholder="First Name">
 		<input type="text" name="last_name" placeholder="Last Name">
-		<select name="hotel">
+		<!-- Hidden Input for the collection name when using DBRefs -->
+		<input type="hidden" value="hotels" name="hotel[$ref]">
+		<!-- && -->
+		<select name="hotel[$id]">
 			<?= $hotel_dropdown ?>
 		</select>
 		<br><br><label>Add Legs</label><br>

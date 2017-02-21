@@ -47,8 +47,13 @@
 							echo $leg_block;
 						} else {
 							if ($key == 'hotel') {
-								$hotelDoc = $mongo->addCollection('hotels');
-								$hotelDoc = $mongo->findDocs($hotelDoc, array('_id' => new MongoId($value)));
+								foreach($value as $hotel_ref => $hotel_ref_val) {
+									$hotel_id = $value['$id'];
+									$hotel_collection = $value['$ref'];
+								}
+								$hotelDoc = $mongo->addCollection($hotel_collection);
+
+								$hotelDoc = $mongo->findDocs($hotelDoc, array('_id' => new MongoId($hotel_id)));
 								$hotelDoc = $mongo->displayDoc($hotelDoc);
 								foreach ($hotelDoc as $hotel_doc) {
 									foreach ($hotel_doc as $hotel_key => $hotel_property) {

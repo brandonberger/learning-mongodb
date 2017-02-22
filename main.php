@@ -125,6 +125,7 @@
 		<input type="text" name="last_name" placeholder="Last Name">
 		<!-- Hidden Input for the collection name when using DBRefs -->
 		<input type="hidden" value="hotels" name="hotel[$ref]">
+		<input type="date" name="pickup_date" placeholder="Pick Up Date">
 		<!-- && -->
 		<select name="hotel[$id]">
 			<?= $hotel_dropdown ?>

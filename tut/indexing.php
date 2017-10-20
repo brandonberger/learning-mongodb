@@ -9,4 +9,4 @@
 	// Querying
 	# db.{collection_name}.find({field_1:value},{field_2: 1})
 
-	
+		
